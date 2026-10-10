@@ -75,6 +75,6 @@ ENV RESOLVER=${RESOLVER}
 
 COPY nginx/templates/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=fetch /site /usr/share/nginx/html
-COPY portal/index.html /usr/share/nginx/html/index.html
+COPY portal/ /usr/share/nginx/html/
 
 EXPOSE 8080

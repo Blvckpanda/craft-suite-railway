@@ -29,8 +29,8 @@
     transition: background .15s, border-color .15s, transform .15s;
   }
   a.card:hover { background: var(--panel-hover); border-color: var(--accent); transform: translateY(-2px); }
-  .card .name { font-size: 17px; font-weight: 650; display: flex; align-items: center; gap: 10px; }
-  .card .name .icon { font-size: 22px; }
+  .card .name { font-size: 17px; font-weight: 650; display: flex; align-items: center; gap: 11px; }
+  .card .name .icon { width: 30px; height: 30px; border-radius: 7px; flex: none; }
   .card .ver {
     margin-left: auto; font-size: 11px; color: var(--accent); background: var(--accent-soft);
     border-radius: 20px; padding: 2px 10px; font-family: ui-monospace, monospace;
@@ -53,16 +53,16 @@
 <footer>
   <p id="versions"></p>
   <p>Your work is saved <strong>in your browser</strong> (OPFS / IndexedDB), tied to this exact domain — no server-side storage, nothing leaves your device. Export anything you care about, and pick your final domain before you start. Chrome or Edge recommended (WebGPU).</p>
-  <p>Apps by the <a href="https://github.com/storytold" rel="noopener">storytold</a> org · MIT / Apache-2.0 · not affiliated with Adobe</p>
+  <p>Apps and app icons by the <a href="https://github.com/storytold" rel="noopener">storytold</a> org · MIT / Apache-2.0 · not affiliated with Adobe</p>
 </footer>
 <script>
 const APPS = [
-  { slug: "photocraft",  icon: "🖼️", like: "Photoshop",   desc: "Raster image editor: layers, masks, adjustments, PSD import, GPU compositing." },
-  { slug: "lightcraft",  icon: "📷", like: "Lightroom",   desc: "Photo library and RAW developer: catalog, non-destructive edits, batch export." },
-  { slug: "pdfcraft",    icon: "📄", like: "Acrobat",     desc: "PDF viewer and toolkit: combine, split, annotate, fill forms, encrypt." },
-  { slug: "vectorcraft", icon: "✒️", like: "Illustrator", desc: "Vector graphics editor: paths, typography, effects, SVG and PDF export." },
-  { slug: "filmcraft",   icon: "🎬", like: "Premiere",    desc: "Non-linear video editor: timeline, color grading, effects, in-house codecs." },
-  { slug: "effectcraft", icon: "✨", like: "After Effects", desc: "Motion graphics and compositing: layers, keyframes, expressions, render queue." },
+  { slug: "photocraft",  like: "Photoshop",   desc: "Raster image editor: layers, masks, adjustments, PSD import, GPU compositing." },
+  { slug: "lightcraft",  like: "Lightroom",   desc: "Photo library and RAW developer: catalog, non-destructive edits, batch export." },
+  { slug: "pdfcraft",    like: "Acrobat",     desc: "PDF viewer and toolkit: combine, split, annotate, fill forms, encrypt." },
+  { slug: "vectorcraft", like: "Illustrator", desc: "Vector graphics editor: paths, typography, effects, SVG and PDF export." },
+  { slug: "filmcraft",   like: "Premiere",    desc: "Non-linear video editor: timeline, color grading, effects, in-house codecs." },
+  { slug: "effectcraft", like: "After Effects", desc: "Motion graphics and compositing: layers, keyframes, expressions, render queue." },
 ];
 const el = document.getElementById("apps");
 for (const a of APPS) {
@@ -70,7 +70,7 @@ for (const a of APPS) {
   card.className = "card";
   card.href = a.slug + "/";
   card.innerHTML =
-    '<div class="name"><span class="icon">' + a.icon + '</span>' + a.slug.charAt(0).toUpperCase() + a.slug.slice(1) +
+    '<div class="name"><img class="icon" src="icons/' + a.slug + '.png" alt="" width="30" height="30" loading="lazy">' + a.slug.charAt(0).toUpperCase() + a.slug.slice(1) +
     '<span class="ver" data-ver="' + a.slug + '"></span></div>' +
     '<div class="like">like ' + a.like + '</div>' +
     '<div class="desc">' + a.desc + '</div>';
