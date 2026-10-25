@@ -1,7 +1,7 @@
-/* Combined single-service build steps for hosts whose builder truncates
- * multi-segment build commands (observed on Pxxl Free): chained && steps
- * after the first were silently skipped, so everything lives in this one
- * script, invoked from the "build" npm script with cwd = server/.
+/* Combined single-service build steps for hosts whose build sandbox copies
+ * only known paths into the build dir (observed on Pxxl Free: package.json,
+ * tsconfig.json and src/, but not new top-level directories), so this script
+ * lives inside src/ and runs from the "build" npm script with cwd = server/.
  *
  * 1. fetch the 10 pinned upstream WASM apps into ./site (cwd-relative, see
  *    portal-node/scripts/fetch-apps.mjs), with the bridge configured for the
@@ -16,8 +16,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 process.env.RELAY_URL_SAME_ORIGIN ||= "1";
 
-const HERE = path.dirname(fileURLToPath(import.meta.url)); // server/scripts
-const SERVER_DIR = path.resolve(HERE, "..");               // server/
+const HERE = path.dirname(fileURLToPath(import.meta.url)); // server/src/scripts
+const SERVER_DIR = path.resolve(HERE, "..", "..");         // server/
 const SITE = path.join(SERVER_DIR, "site");
 const PORTAL = path.resolve(SERVER_DIR, "..", "portal");   // portal/
 

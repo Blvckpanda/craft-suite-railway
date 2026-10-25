@@ -6,7 +6,7 @@
   "private": true,
   "engines": { "node": ">=20" },
   "scripts": {
-    "build": "tsc -p tsconfig.json && node scripts/fetch-combined.mjs",
+    "build": "tsc -p tsconfig.json && node src/scripts/fetch-combined.mjs",
     "start": "node dist/index.js",
     "dev": "tsc -p tsconfig.json && node dist/index.js"
   },
