@@ -12,7 +12,11 @@ import extractZip from "extract-zip";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");           // portal-node/
 const REPOROOT = path.resolve(ROOT, "..");       // repository root
-const SITE = path.join(ROOT, "site");
+// SITE lands under the process working directory (default "site"): the
+// standalone portal build runs with cwd=portal-node, while the combined
+// single-service build runs with cwd=server so every runtime file lands
+// inside its materialized base directory. Override with SITE_DIR.
+const SITE = path.resolve(process.cwd(), process.env.SITE_DIR || "site");
 
 // Pinned versions (bare semver). Release tags are v${VER}; upstream assets are
 // ${repo}-web-${VER}.zip. The FilmCraft/PhotoCraft/PdfCraft web builds that
@@ -30,7 +34,11 @@ const APPS = [
   { repo: "cadcraft",    ver: "0.13.0" },
 ];
 
-const RELAY_URL = process.env.RELAY_URL || "/relay";
+// RELAY_URL_SAME_ORIGIN=1 bakes url:"/" (combined single-service deploys);
+// some build sandboxes mangle a bare RELAY_URL="/" env value into a path.
+const RELAY_URL = process.env.RELAY_URL_SAME_ORIGIN
+  ? "/"
+  : (process.env.RELAY_URL || "/relay");
 
 async function download(url, dest) {
   const res = await fetch(url, { redirect: "follow" });
@@ -62,6 +70,7 @@ async function fetchApp(app) {
     : null;
   if (inner) renameSync(path.join(tmpDir, inner), target);
   else renameSync(tmpDir, target);
+  rmSync(tmpDir, { recursive: true, force: true });
   rmSync(tmpZip, { force: true });
 }
 

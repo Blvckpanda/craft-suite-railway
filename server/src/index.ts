@@ -1,10 +1,13 @@
 import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import express from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { TabRegistry } from "./registry.js";
 import { Denylist } from "./denylist.js";
 import { buildServer } from "./tools.js";
+import { portalMiddleware } from "./portal.js";
 
 // ---------- configuration ----------
 const PORT = parseInt(process.env.PORT ?? "8080", 10);
@@ -98,6 +101,26 @@ async function handleMcp(req: express.Request, res: express.Response) {
 app.post("/mcp", handleMcp);
 app.get("/mcp", handleMcp);    // stateless: SSE stream GET is not supported; SDK answers 400
 app.delete("/mcp", handleMcp); // stateless: SDK answers 405
+
+// ---------- combined portal: serve the WASM apps, bridge scripts and the
+// ---------- portal index from this same origin, behind the MCP routes.
+// Only mounted when a fetched site directory exists (PORTAL_DIR, default
+// "site" relative to the working directory), so the relay stays runnable
+// standalone (Docker path, local dev).
+const PORTAL_DIR = path.resolve(process.cwd(), process.env.PORTAL_DIR ?? "site");
+if (fs.existsSync(path.join(PORTAL_DIR, "bridge", "loader.js"))) {
+  log("portal_mounted", { dir: PORTAL_DIR });
+  const portal = portalMiddleware(PORTAL_DIR);
+  app.use((req, res) => {
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      res.status(405).json({ error: "portal serves GET/HEAD only" });
+      return;
+    }
+    portal(req, res);
+  });
+} else {
+  log("portal_absent", { dir: PORTAL_DIR });
+}
 
 // ---------- HTTP server + bridge WebSocket ----------
 const httpServer = app.listen(PORT, () => {
