@@ -103,7 +103,7 @@
 <body>
 <header>
   <h1>Craft <span>Suite</span></h1>
-  <p>Six open-source, clean-room reimplementations of classic creative tools — pure Rust, compiled to WebAssembly, running entirely in your browser.</p>
+  <p>Ten open-source, clean-room reimplementations of classic creative tools — pure Rust, compiled to WebAssembly, running entirely in your browser.</p>
 </header>
 <main id="apps"></main>
 
@@ -153,7 +153,7 @@
         <p>Keep the app window <b>visible</b> &mdash; hidden tabs pause their frame loop.</p>
       </div>
     </div>
-    <p class="fine">Nothing connects until you click Connect in the page, and the bridge only ever drives the tab it lives in &mdash; a read-only toggle and Disconnect sit in the <span class="fabdemo">&#10686;</span> panel. Works with 5 of the 6 apps today (all but VectorCraft).</p>
+    <p class="fine">Nothing connects until you click Connect in the page, and the bridge only ever drives the tab it lives in &mdash; a read-only toggle and Disconnect sit in the <span class="fabdemo">&#10686;</span> panel. Works today with the app builds that ship an in-page agent API: PhotoCraft, LightCraft, PdfCraft, FilmCraft and EffectCraft. VectorCraft, DesignCraft, FigCraft, SoundCraft and CADCraft load the bridge but expose no commands until upstream ships their APIs.</p>
   </div>
 </section>
 
@@ -170,6 +170,10 @@ const APPS = [
   { slug: "vectorcraft", like: "Illustrator", desc: "Vector graphics editor: paths, typography, effects, SVG and PDF export." },
   { slug: "filmcraft",   like: "Premiere",    desc: "Non-linear video editor: timeline, color grading, effects, in-house codecs." },
   { slug: "effectcraft", like: "After Effects", desc: "Motion graphics and compositing: layers, keyframes, expressions, render queue." },
+  { slug: "designcraft", like: "InDesign",  desc: "Page and layout design editor: spreads, typography, grids, print layout." },
+  { slug: "figcraft",    like: "Figma",     desc: "Interface design and prototyping: frames, components, collaborative workflows." },
+  { slug: "soundcraft",  like: "Pro Tools", desc: "Digital audio workstation: multitrack recording, mixing, plugins, mixdown." },
+  { slug: "cadcraft",    like: "AutoCAD",   desc: "Computer-aided design and drafting: 2D plans, parametric drawing, DWG-style workflows." },
 ];
 const el = document.getElementById("apps");
 for (const a of APPS) {

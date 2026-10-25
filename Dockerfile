@@ -11,6 +11,10 @@ ARG PDFCRAFT_VERSION=0.5.0-main2
 ARG VECTORCRAFT_VERSION=0.7.0
 ARG FILMCRAFT_VERSION=0.4.0-main
 ARG EFFECTCRAFT_VERSION=0.6.0
+ARG DESIGNCRAFT_VERSION=0.13.0
+ARG FIGCRAFT_VERSION=0.11.2
+ARG SOUNDCRAFT_VERSION=0.13.1
+ARG CADCRAFT_VERSION=0.13.0
 # The FilmCraft, PhotoCraft and PdfCraft web builds that ship the in-page
 # agent APIs (window.filmcraft / window.photocraft / window.pdfcraft) are
 # published from this repo, not upstream — they carry a "-main" version
@@ -37,11 +41,17 @@ RUN set -eux; \
     fetch lightcraft  "${LIGHTCRAFT_VERSION}"; \
     fetch pdfcraft    "${PDFCRAFT_VERSION}" "${PDFCRAFT_URL}"; \
     fetch vectorcraft "${VECTORCRAFT_VERSION}"; \
-    fetch filmcraft   "${FILMCRAFT_VERSION}" "${FILMCRAFT_URL}"; \
-    fetch effectcraft "${EFFECTCRAFT_VERSION}"; \
-    printf '{"photocraft":"v%s","lightcraft":"v%s","pdfcraft":"v%s","vectorcraft":"v%s","filmcraft":"v%s","effectcraft":"v%s"}\n' \
-      "${PHOTOCRAFT_VERSION}" "${LIGHTCRAFT_VERSION}" "${PDFCRAFT_VERSION}" \
-      "${VECTORCRAFT_VERSION}" "${FILMCRAFT_VERSION}" "${EFFECTCRAFT_VERSION}" \
+    fetch filmcraft   "${FILMCRAFT_VERSION}" "${FILMCRAFT_URL}"; \fetch effectcraft "${EFFECTCRAFT_VERSION}"; \
+fetch designcraft "${DESIGNCRAFT_VERSION}"; \
+fetch figcraft "${FIGCRAFT_VERSION}"; \
+fetch soundcraft "${SOUNDCRAFT_VERSION}"; \
+fetch cadcraft "${CADCRAFT_VERSION}"; \
+printf '{"photocraft":"v%s","lightcraft":"v%s","pdfcraft":"v%s","vectorcraft":"v%s","filmcraft":"v%s","effectcraft":"v%s","designcraft":"v%s","figcraft":"v%s","soundcraft":"v%s","cadcraft":"v%s"}\n' \
+"${PHOTOCRAFT_VERSION}" "${LIGHTCRAFT_VERSION}" "${PDFCRAFT_VERSION}" \
+"${VECTORCRAFT_VERSION}" "${FILMCRAFT_VERSION}" "${EFFECTCRAFT_VERSION}" \
+"${DESIGNCRAFT_VERSION}" "${FIGCRAFT_VERSION}" "${SOUNDCRAFT_VERSION}" \
+"${CADCRAFT_VERSION}" \
+
       > /site/versions.json
 
 # Craft Relay bridge: static script served same-origin. Inject the script

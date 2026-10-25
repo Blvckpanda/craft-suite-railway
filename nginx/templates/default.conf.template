@@ -46,7 +46,7 @@ server {
     }
 
     # --- Hashed/immutable app assets: cache forever.
-    location ~ ^/(photocraft|pdfcraft|vectorcraft|filmcraft)/.*\.(wasm|js)$ {
+    location ~ ^/(photocraft|pdfcraft|vectorcraft|filmcraft|designcraft|figcraft|soundcraft|cadcraft)/.*\.(wasm|js)$ {
         add_header Cache-Control "public, max-age=31536000, immutable" always;
         add_header Cross-Origin-Opener-Policy "same-origin" always;
         add_header Cross-Origin-Embedder-Policy "require-corp" always;
