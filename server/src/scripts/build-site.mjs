@@ -111,17 +111,21 @@ async function downloadText(url) {
   return await res.text();
 }
 
+// Build-scoped cache-busting query on the injected tags: intermediary caches
+// along the Pxxl edge may extend asset freshness regardless of origin
+// Cache-Control, and a versioned tag guarantees fresh bridge scripts after a
+// redeploy.
+const TAG_V = process.env.TAG_V || new Date().toISOString().replace(/\D/g, "").slice(0, 13);
+
 function injectBridge() {
   writeFileSync(path.join(SITE, "bridge", "config.js"), `window.CRAFT_RELAY = { url: "${RELAY_URL}" };\n`);
+  const tags = `\n<script src="/bridge/config.js?v=${TAG_V}"></script><script src="/bridge/adapters.js?v=${TAG_V}"></script><script src="/bridge/loader.js?v=${TAG_V}" defer></script>`;
   for (const app of APPS) {
     const index = path.join(SITE, app.repo, "index.html");
     if (!existsSync(index)) throw new Error(`${app.repo}: site has no index.html`);
     let html = readFileSync(index, "utf8");
     if (!html.includes("bridge/loader.js")) {
-      html = html.replace(
-        "</body>",
-        `<script src="/bridge/config.js"></script><script src="/bridge/adapters.js"></script><script src="/bridge/loader.js" defer></script></body>`
-      );
+      html = html.replace("</body>", `${tags}</body>`);
       writeFileSync(index, html);
     }
   }
