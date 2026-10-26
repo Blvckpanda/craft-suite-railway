@@ -41,11 +41,10 @@ const APPS = [
   { repo: "cadcraft",    ver: "0.13.0" },
 ];
 
-// Combined deploy = one origin, so the bridge reaches /bridge directly.
-// RELAY_URL still wins if a future split deployment needs an absolute URL;
-// RELAY_URL_SAME_ORIGIN=1 forces "/" for hand-run combined builds.
-const RELAY_URL = process.env.RELAY_URL
-  ?? (process.env.RELAY_URL_SAME_ORIGIN ? "/" : "/bridge");
+// Combined deploy = one origin. The loader appends "/bridge" itself and
+// upgrades relative URLs against location.origin, so the same-origin value is
+// "/" — NOT "/bridge", which would double-append the bridge path.
+const RELAY_URL = process.env.RELAY_URL || "/";
 
 async function download(url, dest) {
   const res = await fetch(url, { redirect: "follow", headers: { "user-agent": "craft-suite-build" } });
