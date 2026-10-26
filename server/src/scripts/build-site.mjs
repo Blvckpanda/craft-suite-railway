@@ -1,12 +1,12 @@
 /* Build the combined site: 10 pinned WASM apps + repo bridge scripts + portal
  * shell, all served from one origin by the relay's portal middleware.
  *
- * This is the ONLY build script the combined deploy may use, because the Pxxl
+ * This is the ONLY build script for all deployments, because the Pxxl
  * builder runs the server/Dockerfile RUN stages with a build context of just
- * server/ (package.json, tsconfig.json, src/). Everything not inside src/ -
- * portal-node/, portal/, bridge/ - does not exist here, so the script pulls
- * the pinned upstream release zip (as the Dockerfile fetch stage does) plus
- * the fork's bridge scripts and portal shell over HTTPS from raw.githubusercontent.
+ * server/ (package.json, tsconfig.json, src/). Everything not inside src/
+ * cannot be imported here, so this single builder pulls the pinned upstream
+ * release zips (as the Dockerfile fetch stage does) plus the fork's bridge
+ * scripts and portal shell over HTTPS from raw.githubusercontent.
  * Fails fast if any artifact is missing.
  */
 import { mkdirSync, writeFileSync, readFileSync, readdirSync, statSync, existsSync, rmSync, renameSync, copyFileSync } from "node:fs";
